@@ -8,38 +8,40 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State private var isNight: Bool = false
+    
     var body: some View {
         
         ZStack {
-            BackgroundView(topColor: .blue, bottomColor: Color("lightBlue"))
+            BackgroundView(isNight: isNight)
             
             VStack {
                 CityTextView(cidade: "São Paulo", estado: "sp")
                 
-                MainWeatherStatusView(imagem: "cloud.sun.fill", temperatura: 26)
+                MainWeatherStatusView(imagem: isNight ? "moon.stars.fill" : "cloud.sun.fill", temperatura: isNight ? 20 : 26)
                 
                 HStack(spacing: 20) {
                         WeatherNextView(dayOfWeek: "seg",
                                         imagem: "cloud.bolt.rain.fill",
-                                        temperature: 24)
+                                        temperature: 18)
                         WeatherNextView(dayOfWeek: "ter",
                                         imagem: "cloud.sun.fill",
                                         temperature: 24)
                         WeatherNextView(dayOfWeek: "qua",
                                         imagem: "sun.max.fill",
-                                        temperature: 24)
+                                        temperature: 28)
                         WeatherNextView(dayOfWeek: "qui",
                                         imagem: "cloud.heavyrain.fill",
-                                        temperature: 24)
+                                        temperature: 19)
                         WeatherNextView(dayOfWeek: "sex",
                                         imagem: "cloud.sun.rain.fill",
-                                        temperature: 24)
+                                        temperature: 21)
                     }
                 
                 Spacer()
                 
                 Button {
-                    print("Tapped")
+                    isNight.toggle()
                 } label: {
                     WeatherButton(texto: "Mude o Horário do dia", cor: .blue, corFundo: .white)
                 }
@@ -68,7 +70,7 @@ struct WeatherNextView: View {
                     .padding(.bottom, 2)
                 
                 Image(systemName: imagem)
-                    .renderingMode(.original)
+                    .symbolRenderingMode(.multicolor)
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 40, height: 40)
@@ -81,14 +83,14 @@ struct WeatherNextView: View {
 }
 
 struct BackgroundView: View {
-    let topColor: Color
-    let bottomColor: Color
+   
+    var isNight: Bool
     
     var body: some View {
-        LinearGradient(gradient: Gradient(colors: [topColor, bottomColor]),
+        LinearGradient(gradient: Gradient(colors: [isNight ? .black : .blue, isNight ? .gray : Color("lightBLue")]),
                        startPoint: .topLeading,
                        endPoint: .bottomTrailing)
-        .edgesIgnoringSafeArea(.all)
+        .ignoresSafeArea()
     }
 }
 
